@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
+  AlertTriangle,
   Bike,
   ChevronLeft,
   ChevronRight,
@@ -15,9 +16,12 @@ import {
   RotateCcw,
   Send,
   Sparkles,
+  Trash2,
   User,
+  X,
   Zap,
 } from 'lucide-react';
+import { clearAllWorkoutsAction } from '@/app/actions/training';
 import { signOutAction } from '@/app/login/actions';
 import {
   addDays,
@@ -90,6 +94,9 @@ export function WeeklyDashboard({
   }>({ open: false, event: null });
   const [isExportingZip, setIsExportingZip] = useState(false);
   const [isPushingIntervals, setIsPushingIntervals] = useState(false);
+  const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+  const [isClearingAll, setIsClearingAll] = useState(false);
+  const [clearError, setClearError] = useState<string | null>(null);
   const [pushFeedback, setPushFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -156,6 +163,25 @@ export function WeeklyDashboard({
       });
     } finally {
       setIsPushingIntervals(false);
+    }
+  }
+
+  async function handleConfirmClearAll() {
+    if (isClearingAll) return;
+    setClearError(null);
+    setIsClearingAll(true);
+    try {
+      await clearAllWorkoutsAction();
+      setConfirmClearOpen(false);
+      setPushFeedback(null);
+      router.push('/');
+      router.refresh();
+    } catch (err) {
+      setClearError(
+        err instanceof Error ? err.message : 'Failed to clear workouts.'
+      );
+    } finally {
+      setIsClearingAll(false);
     }
   }
 
@@ -442,15 +468,31 @@ export function WeeklyDashboard({
                       </button>
                     </>
                   ) : (
+                      <button
+                        type="button"
+                        onClick={() => setBlockModalMode('start')}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-none border border-[#2A2A28] bg-[#181818] px-3.5 font-mono text-[11px] font-medium text-[#F7F7F5] uppercase transition hover:bg-[#3B5B7A] hover:border-[#3B5B7A]"
+                      >
+                        <Sparkles className="h-3 w-3 text-[#A8C1D8]" />
+                        <span>Start Training Block</span>
+                      </button>
+                  )}
+
+                  {workouts.length > 0 || activeBlock !== null ? (
                     <button
                       type="button"
-                      onClick={() => setBlockModalMode('start')}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-none border border-[#2A2A28] bg-[#181818] px-3.5 font-mono text-[11px] font-medium text-[#F7F7F5] uppercase transition hover:bg-[#3B5B7A] hover:border-[#3B5B7A]"
+                      onClick={() => {
+                        setClearError(null);
+                        setConfirmClearOpen(true);
+                      }}
+                      title="Clear all workouts"
+                      aria-label="Clear all workouts"
+                      className="inline-flex h-8 items-center gap-1.5 rounded-none border border-[#D4D4CE] bg-[#F7F7F5] px-2.5 font-mono text-[11px] font-medium text-[#6B6B68] uppercase transition hover:border-[#991B1B] hover:bg-[#FEF2F2] hover:text-[#991B1B]"
                     >
-                      <Sparkles className="h-3 w-3 text-[#A8C1D8]" />
-                      <span>Start Training Block</span>
+                      <Trash2 className="h-3.5 w-3.5 stroke-[1.75]" />
+                      <span className="hidden sm:inline">Clear All</span>
                     </button>
-                  )}
+                  ) : null}
                 </div>
               </div>
 
@@ -515,6 +557,84 @@ export function WeeklyDashboard({
           event={eventModalState.event}
           onClose={() => setEventModalState({ open: false, event: null })}
         />
+      ) : null}
+
+      {confirmClearOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 sm:items-center sm:p-5"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Confirm clear all workouts"
+        >
+          <div className="w-full max-w-md rounded-none border border-[#2A2A28] bg-[#F7F7F5] p-6">
+            <div className="mb-4 flex items-start justify-between gap-3 border-b border-[#D4D4CE] pb-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-none border border-[#991B1B] bg-[#FEF2F2] text-[#991B1B]">
+                  <AlertTriangle className="h-4 w-4 stroke-[1.75]" />
+                </div>
+                <div>
+                  <h2 className="text-base font-semibold tracking-tight text-[#181818]">
+                    Clear All Workouts?
+                  </h2>
+                  <p className="font-mono text-[11px] text-[#6B6B68] uppercase">
+                    This action cannot be undone
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                disabled={isClearingAll}
+                onClick={() => setConfirmClearOpen(false)}
+                aria-label="Close confirmation dialog"
+                className="flex h-8 w-8 items-center justify-center rounded-none border border-[#D4D4CE] bg-white text-[#6B6B68] transition hover:border-[#2A2A28] hover:text-[#181818] disabled:opacity-50"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <p className="text-sm leading-relaxed text-[#3A3A38]">
+              Are you sure you want to delete all scheduled workouts across every
+              week and reset your current training block? Your athlete profile,
+              FTP, and target events will stay untouched.
+            </p>
+
+            {clearError ? (
+              <div className="mt-4 rounded-none border border-[#B91C1C]/40 bg-[#FEF2F2] px-3 py-2 font-mono text-xs font-medium text-[#991B1B]">
+                {clearError}
+              </div>
+            ) : null}
+
+            <div className="mt-5 flex items-center justify-end gap-2 border-t border-[#D4D4CE] pt-4">
+              <button
+                type="button"
+                disabled={isClearingAll}
+                onClick={() => setConfirmClearOpen(false)}
+                className="rounded-none border border-[#D4D4CE] bg-white px-4 py-2 font-mono text-[11px] font-medium text-[#181818] uppercase transition hover:border-[#2A2A28] disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isClearingAll}
+                onClick={handleConfirmClearAll}
+                className="inline-flex items-center gap-1.5 rounded-none border border-[#991B1B] bg-[#991B1B] px-4 py-2 font-mono text-[11px] font-medium text-[#F7F7F5] uppercase transition hover:bg-[#7F1D1D] disabled:opacity-60"
+              >
+                {isClearingAll ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Clearing…
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Yes, Clear All
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
     </div>
   );

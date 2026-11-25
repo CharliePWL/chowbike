@@ -300,3 +300,36 @@ export async function deleteWorkoutAction(workoutId: string) {
 
   revalidatePath('/');
 }
+
+export async function clearAllWorkoutsAction() {
+  const { supabase, user } = await requireAllowedUser();
+
+  const { error: workoutsErr } = await supabase
+    .from('workouts')
+    .delete()
+    .not('id', 'is', null);
+
+  if (workoutsErr) {
+    throw new Error(workoutsErr.message);
+  }
+
+  const { error: weeksErr } = await supabase
+    .from('training_weeks')
+    .delete()
+    .not('id', 'is', null);
+
+  if (weeksErr) {
+    throw new Error(weeksErr.message);
+  }
+
+  const { error: blocksErr } = await supabase
+    .from('training_blocks')
+    .delete()
+    .eq('user_id', user.id);
+
+  if (blocksErr) {
+    throw new Error(blocksErr.message);
+  }
+
+  revalidatePath('/');
+}
