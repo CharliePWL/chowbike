@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDuration, formatShortDayDate } from '@/lib/dates';
-import { getZoneMeta, type Workout } from '@/types/training';
+import { getZoneMeta, type Workout, type WorkoutEnvironment } from '@/types/training';
 import { WorkoutItem } from './WorkoutItem';
 
 interface DayCardProps {
@@ -11,6 +11,7 @@ interface DayCardProps {
   isToday: boolean;
   workouts: Workout[];
   ftpWatts: number;
+  weekEnvironment?: WorkoutEnvironment;
 }
 
 /** Map a workout's primary zone to a 3px left-accent color */
@@ -40,6 +41,7 @@ export function DayCard({
   isToday,
   workouts,
   ftpWatts,
+  weekEnvironment = 'outdoor',
 }: DayCardProps) {
   const totalMinutes = workouts.reduce(
     (sum, item) => sum + (item.duration_minutes || 0),
@@ -117,6 +119,7 @@ export function DayCard({
                 workout={workout}
                 dateStr={dateStr}
                 ftpWatts={ftpWatts}
+                weekEnvironment={weekEnvironment}
               />
             ))
           )}

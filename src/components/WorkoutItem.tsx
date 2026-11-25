@@ -19,19 +19,21 @@ import { formatDuration } from '@/lib/dates';
 import { downloadWorkoutFit } from '@/lib/fit/exportHelpers';
 import { isExportableWorkout } from '@/lib/fit/intervalParser';
 import { parseApiResponse } from '@/lib/http';
-import { getZoneMeta, type Workout } from '@/types/training';
+import { getZoneMeta, type Workout, type WorkoutEnvironment } from '@/types/training';
 import { PowerPreviewChart } from './PowerPreviewChart';
 
 interface WorkoutItemProps {
   workout: Workout;
   dateStr: string;
   ftpWatts: number;
+  weekEnvironment?: WorkoutEnvironment;
 }
 
 export function WorkoutItem({
   workout,
   dateStr,
   ftpWatts,
+  weekEnvironment = 'outdoor',
 }: WorkoutItemProps) {
   const router = useRouter();
   const [optimisticCompleted, setOptimisticCompleted] = useOptimistic(
@@ -54,10 +56,17 @@ export function WorkoutItem({
   const [isSavingEdit, startEditTransition] = useTransition();
 
   // AI Adjust state
+  const currentEnvironment: WorkoutEnvironment =
+    workout.environment ?? weekEnvironment ?? 'outdoor';
   const [aiPrompt, setAiPrompt] = useState('');
-  const [adjustEnvironment, setAdjustEnvironment] = useState<
-    'outdoor' | 'indoor'
-  >('outdoor');
+  const [envOverride, setEnvOverride] = useState<{
+    forBase: WorkoutEnvironment;
+    value: WorkoutEnvironment;
+  } | null>(null);
+  const adjustEnvironment: WorkoutEnvironment =
+    envOverride && envOverride.forBase === currentEnvironment
+      ? envOverride.value
+      : currentEnvironment;
   const [isAdjusting, setIsAdjusting] = useState(false);
   const [adjustError, setAdjustError] = useState<string | null>(null);
 
@@ -119,10 +128,15 @@ export function WorkoutItem({
     });
   }
 
+  const canSubmitAdjust =
+    Boolean(aiPrompt.trim()) ||
+    adjustEnvironment === 'indoor' ||
+    adjustEnvironment !== currentEnvironment;
+
   async function handleAiAdjust(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = aiPrompt.trim();
-    if ((!trimmed && adjustEnvironment !== 'indoor') || isAdjusting) return;
+    if (!canSubmitAdjust || isAdjusting) return;
 
     setAdjustError(null);
     setIsAdjusting(true);
@@ -433,7 +447,12 @@ export function WorkoutItem({
                     key={env}
                     type="button"
                     disabled={isAdjusting}
-                    onClick={() => setAdjustEnvironment(env)}
+                    onClick={() =>
+                      setEnvOverride({
+                        forBase: currentEnvironment,
+                        value: env,
+                      })
+                    }
                     className={`px-2 font-mono text-[10px] font-medium uppercase transition ${
                       idx === 0 ? 'border-r border-[#D4D4CE]' : ''
                     } ${
@@ -455,17 +474,16 @@ export function WorkoutItem({
                 placeholder={
                   adjustEnvironment === 'indoor'
                     ? 'Indoor ERG (e.g., 60m max) or leave blank'
-                    : 'AI adjust (e.g., Only 60m today / Legs cooked)'
+                    : currentEnvironment === 'indoor'
+                      ? 'Outdoor road (e.g., 3h endurance) or leave blank'
+                      : 'AI adjust (e.g., Only 60m today / Legs cooked)'
                 }
                 aria-label={`AI adjust ${workout.title}`}
                 className="min-w-0 flex-1 rounded-none border border-[#D4D4CE] bg-white px-2.5 py-1.5 text-xs font-normal text-[#181818] placeholder:text-[#9A9A95] focus:border-[#3B5B7A] focus:outline-none disabled:opacity-60"
               />
               <button
                 type="submit"
-                disabled={
-                  isAdjusting ||
-                  (!aiPrompt.trim() && adjustEnvironment !== 'indoor')
-                }
+                disabled={isAdjusting || !canSubmitAdjust}
                 title="Adjust this day with AI"
                 className="inline-flex h-[30px] shrink-0 items-center gap-1 rounded-none border border-[#3B5B7A] bg-[#3B5B7A] px-2.5 font-mono text-[11px] font-medium text-[#F7F7F5] uppercase transition hover:bg-[#2E4861] disabled:cursor-not-allowed disabled:border-[#D4D4CE] disabled:bg-[#EFEFEC] disabled:text-[#9A9A95]"
               >

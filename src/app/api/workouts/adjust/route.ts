@@ -49,21 +49,10 @@ export async function POST(request: Request) {
     const workoutId = body.workoutId?.trim();
     const environment = body.environment === 'indoor' ? 'indoor' : 'outdoor';
     const rawInstruction = body.instruction?.trim() ?? '';
-    const instruction =
-      rawInstruction ||
-      (environment === 'indoor'
-        ? 'Convert this session to an indoor ERG trainer workout.'
-        : '');
 
     if (!workoutId) {
       return NextResponse.json(
         { error: 'workoutId is required.' },
-        { status: 400 }
-      );
-    }
-    if (!instruction) {
-      return NextResponse.json(
-        { error: 'Please enter how you want to adjust this workout.' },
         { status: 400 }
       );
     }
@@ -82,6 +71,21 @@ export async function POST(request: Request) {
       );
     }
     const targetWorkout = targetData as Workout;
+    const currentWorkoutEnv = targetWorkout.environment ?? 'outdoor';
+    const instruction =
+      rawInstruction ||
+      (environment === 'indoor'
+        ? 'Convert this session to an indoor ERG trainer workout.'
+        : currentWorkoutEnv === 'indoor'
+          ? 'Convert this indoor session into an outdoor road workout matching the block phase and coach style.'
+          : '');
+
+    if (!instruction) {
+      return NextResponse.json(
+        { error: 'Please enter how you want to adjust this workout.' },
+        { status: 400 }
+      );
+    }
 
     // Load week metadata, full week workouts, profile, Intervals PDC, and coach philosophy
     const [
@@ -200,6 +204,7 @@ ${JSON.stringify(weekContext, null, 2)}
         duration_minutes: zone === 'Rest' ? 0 : durationMinutes,
         zone,
         intervals: cleanDescription,
+        environment,
       })
       .eq('id', targetWorkout.id)
       .select('*')

@@ -289,6 +289,7 @@ ${ctx.upcomingEvents.length > 0 ? JSON.stringify(ctx.upcomingEvents, null, 2) : 
       blockWeek: nextWeekNumber,
       blockTotalWeeks: block.total_weeks,
       blockPhase: targetPhase,
+      environment,
       days: generated.days ?? [],
       unavailableSet,
     });

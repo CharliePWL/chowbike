@@ -95,12 +95,15 @@ export const DAYS_OF_WEEK = [
   { day: 7, short: 'Sun', full: 'Sunday' },
 ] as const;
 
+export type WorkoutEnvironment = 'outdoor' | 'indoor';
+
 export interface TrainingWeek {
   id: string;
   week_start: string;
   title: string;
   focus: string | null;
   notes: string | null;
+  environment?: WorkoutEnvironment;
   block_id?: string | null;
   block_name?: string | null;
   block_week?: number | null;
@@ -163,6 +166,7 @@ export interface Workout {
   duration_minutes: number;
   zone: string;
   intervals: string | null;
+  environment?: WorkoutEnvironment;
   completed: boolean;
   notes: string | null;
   completed_at: string | null;

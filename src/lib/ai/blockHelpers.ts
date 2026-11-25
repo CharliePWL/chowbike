@@ -9,6 +9,7 @@ import type {
   TrainingWeek,
   TrainingZone,
   Workout,
+  WorkoutEnvironment,
 } from '@/types/training';
 
 export const ALLOWED_ZONES: TrainingZone[] = [
@@ -317,6 +318,7 @@ export async function persistGeneratedWeek(params: {
   blockWeek: number;
   blockTotalWeeks: number;
   blockPhase: string;
+  environment?: WorkoutEnvironment;
   days: GeneratedDayItem[];
   unavailableSet: Set<number>;
 }): Promise<{ week: TrainingWeek; workouts: Workout[] }> {
@@ -330,6 +332,7 @@ export async function persistGeneratedWeek(params: {
     blockWeek,
     blockTotalWeeks,
     blockPhase,
+    environment = 'outdoor',
     days,
     unavailableSet,
   } = params;
@@ -343,6 +346,7 @@ export async function persistGeneratedWeek(params: {
   const richFields = {
     title,
     focus,
+    environment,
     block_id: blockId,
     block_name: blockName,
     block_week: blockWeek,
@@ -420,6 +424,7 @@ export async function persistGeneratedWeek(params: {
         duration_minutes: 0,
         zone: 'Rest',
         intervals: 'Rest day · off the bike',
+        environment,
         completed: false,
         notes: null,
         completed_at: null,
@@ -436,6 +441,7 @@ export async function persistGeneratedWeek(params: {
         duration_minutes: 0,
         zone: 'Rest',
         intervals: 'Rest day · off the bike',
+        environment,
         completed: false,
         notes: null,
         completed_at: null,
@@ -460,6 +466,7 @@ export async function persistGeneratedWeek(params: {
       intervals:
         raw.coach_description?.trim() ||
         (zone === 'Rest' ? 'Rest day · off the bike' : null),
+      environment,
       completed: false,
       notes: null,
       completed_at: null,

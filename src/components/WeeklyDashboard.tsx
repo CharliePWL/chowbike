@@ -528,6 +528,7 @@ export function WeeklyDashboard({
                     isToday={todayStr === dateStr}
                     workouts={dayWorkouts}
                     ftpWatts={ftpWatts}
+                    weekEnvironment={week?.environment ?? 'outdoor'}
                   />
                 );
               })}
