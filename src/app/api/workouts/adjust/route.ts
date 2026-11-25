@@ -134,7 +134,7 @@ export async function POST(request: Request) {
       };
     });
 
-    const prompt = `You are this cyclist's head coach. Adjust ONLY ONE day's workout based on the athlete's request while keeping it coherent with the rest of this week's schedule and the weekly pyramidal time-in-zone budget.
+    const prompt = `You are this cyclist's head coach. Adjust ONLY ONE day's workout based on the athlete's request while keeping it coherent with the rest of this week's schedule, easy-day discipline, and recovery between hard days (treating time-in-zone ranges as loose directional guidelines without trimming top-end intervals).
 
 === TRAINING_LOGIC_AND_PERIODIZATION_RULES ===
 ${trainingRules}
