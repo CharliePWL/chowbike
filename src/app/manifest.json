@@ -1,0 +1,29 @@
+{
+  "name": "Chow Cycling · Training Architecture",
+  "short_name": "CHOW",
+  "description": "Brutalist cycling block planner, AI FTP coach, and Garmin/Intervals.icu workout sync.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EAEAE5",
+  "theme_color": "#EAEAE5",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

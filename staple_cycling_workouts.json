@@ -1,0 +1,360 @@
+{
+  "rider_profile": {
+    "weight_lbs": "147-153",
+    "weight_kg": "66.7-69.4",
+    "ftp_watts": 365,
+    "w_per_kg": "5.26-5.47"
+  },
+  "workouts": [
+    {
+      "name": "Rønnestad 30/15s",
+      "category": "VO2 Max",
+      "coach_or_source": "Bent Rønnestad",
+      "duration_minutes": 75,
+      "target_zone": "Zone 5 (VO2 Max) — 120–130% FTP (438–475 W)",
+      "primary_adaptation": "Maximize time spent at >90% VO2 max with high aerobic power output",
+      "interval_breakdown": {
+        "warmup": "15 min progressive 55–75% FTP (201–274 W) with 3 x 30s openers at 110% FTP (402 W)",
+        "main_set": [
+          {
+            "sets": 3,
+            "reps_per_set": 13,
+            "work": "30s @ 120–130% FTP (438–475 W)",
+            "recovery": "15s @ 50% FTP (183 W)",
+            "rest_between_sets": "3–5 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "15 min easy spinning @ 50–60% FTP (183–219 W)"
+      }
+    },
+    {
+      "name": "Seiler 4x8 min",
+      "category": "VO2 Max",
+      "coach_or_source": "Stephen Seiler",
+      "duration_minutes": 80,
+      "target_zone": "Zone 5 (Low VO2 Max) — 105–108% FTP (383–394 W)",
+      "primary_adaptation": "High-volume aerobic capacity and fractional utilization of VO2 max",
+      "interval_breakdown": {
+        "warmup": "20 min @ 60–75% FTP (219–274 W) including 2 x 1 min @ 105% FTP (383 W)",
+        "main_set": [
+          {
+            "sets": 4,
+            "work": "8 min @ 105–108% FTP (383–394 W) — maximal sustainable effort across all 4 reps",
+            "recovery": "4 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "16 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "Classic 5x5 min VO2 Max",
+      "category": "VO2 Max",
+      "coach_or_source": "Hunter Allen & Andrew Coggan",
+      "duration_minutes": 75,
+      "target_zone": "Zone 5 (VO2 Max) — 112–118% FTP (409–431 W)",
+      "primary_adaptation": "Increase maximal oxygen uptake (VO2 max) and cardiac stroke volume",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 3 x 20s fast-pedal accelerations",
+        "main_set": [
+          {
+            "sets": 5,
+            "work": "5 min @ 112–118% FTP (409–431 W) at 95–105 RPM",
+            "recovery": "5 min @ 50–55% FTP (183–201 W)"
+          }
+        ],
+        "cooldown": "15 min @ 50–60% FTP (183–219 W)"
+      }
+    },
+    {
+      "name": "Hard-Start 4x4 min VO2 Max",
+      "category": "VO2 Max",
+      "coach_or_source": "Mikael Eriksson / Modern WorldTour Methodology",
+      "duration_minutes": 70,
+      "target_zone": "Zone 5 (VO2 Max) — 125–130% start into 108–112% hold (456–475 W into 394–409 W)",
+      "primary_adaptation": "Accelerate VO2 kinetics to reach maximal oxygen consumption earlier in each interval",
+      "interval_breakdown": {
+        "warmup": "18 min @ 60–75% FTP (219–274 W) with 2 x 45s openers @ 115% FTP (420 W)",
+        "main_set": [
+          {
+            "sets": 4,
+            "work": "45s @ 125–130% FTP (456–475 W) immediately into 3 min 15s @ 108–112% FTP (394–409 W)",
+            "recovery": "4 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "20 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "Classic 2x20 min FTP",
+      "category": "Threshold",
+      "coach_or_source": "Andrew Coggan & Hunter Allen",
+      "duration_minutes": 75,
+      "target_zone": "Zone 4 (Threshold) — 95–100% FTP (347–365 W)",
+      "primary_adaptation": "Raise sustainable threshold power and lactate clearance",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 3 x 1 min @ 100% FTP (365 W)",
+        "main_set": [
+          {
+            "sets": 2,
+            "work": "20 min @ 95–100% FTP (347–365 W)",
+            "recovery": "10 min @ 55–60% FTP (201–219 W)"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "3x15 min Threshold",
+      "category": "Threshold",
+      "coach_or_source": "Joe Friel",
+      "duration_minutes": 80,
+      "target_zone": "Zone 4 (Threshold) — 98–102% FTP (358–372 W)",
+      "primary_adaptation": "Build muscular endurance and extend time at FTP",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 2 x 2 min @ 95% FTP (347 W)",
+        "main_set": [
+          {
+            "sets": 3,
+            "work": "15 min @ 98–102% FTP (358–372 W)",
+            "recovery": "5 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "4x10 min Supra-Threshold",
+      "category": "Threshold",
+      "coach_or_source": "Tim Cusick / WKO5",
+      "duration_minutes": 75,
+      "target_zone": "Zone 4/5 (Supra-Threshold) — 100–105% FTP (365–383 W)",
+      "primary_adaptation": "Pull FTP upward by stressing aerobic ceiling just above lactate threshold",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 3 x 30s @ 110% FTP (402 W)",
+        "main_set": [
+          {
+            "sets": 4,
+            "work": "10 min @ 100–105% FTP (365–383 W)",
+            "recovery": "5 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "1x45 min Continuous TTE (Time to Exhaustion)",
+      "category": "Threshold",
+      "coach_or_source": "Tim Cusick & Kolie Moore",
+      "duration_minutes": 75,
+      "target_zone": "Zone 4 (Threshold) — 96–100% FTP (350–365 W)",
+      "primary_adaptation": "Extend Time to Exhaustion (TTE) at threshold and build time-trial pacing discipline",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 2 x 2 min @ 95% FTP (347 W)",
+        "main_set": [
+          {
+            "sets": 1,
+            "work": "45 min continuous @ 96–100% FTP (350–365 W)",
+            "recovery": "None"
+          }
+        ],
+        "cooldown": "15 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "3x20 min Sweet Spot",
+      "category": "Sweet Spot",
+      "coach_or_source": "Frank Overton / FasCat Coaching",
+      "duration_minutes": 90,
+      "target_zone": "Zone 3/4 (Sweet Spot) — 88–94% FTP (321–343 W)",
+      "primary_adaptation": "High-efficiency aerobic and mitochondrial development with manageable fatigue",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 3,
+            "work": "20 min @ 88–94% FTP (321–343 W)",
+            "recovery": "5 min @ 55–60% FTP (201–219 W)"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "2x30 min Sweet Spot with Bursts",
+      "category": "Sweet Spot",
+      "coach_or_source": "Frank Overton / Race-Specific SST",
+      "duration_minutes": 90,
+      "target_zone": "Zone 3/4 (Sweet Spot) — 88–92% FTP (321–336 W) + 130% bursts (475 W)",
+      "primary_adaptation": "Simulate hard group-ride/race surges while maintaining high aerobic load",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 2,
+            "work": "30 min @ 88–92% FTP (321–336 W), executing a 10s surge @ 130% FTP (475 W) every 5 min",
+            "recovery": "10 min @ 55–60% FTP (201–219 W)"
+          }
+        ],
+        "cooldown": "15 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "1x60 min Continuous Sweet Spot",
+      "category": "Sweet Spot",
+      "coach_or_source": "Tim Cusick / Sweet Spot Base",
+      "duration_minutes": 90,
+      "target_zone": "Zone 3/4 (Sweet Spot) — 88–92% FTP (321–336 W)",
+      "primary_adaptation": "Deep muscular endurance, glycogen storage capacity, and sustained climbing strength",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 1,
+            "work": "60 min continuous @ 88–92% FTP (321–336 W)",
+            "recovery": "None"
+          }
+        ],
+        "cooldown": "15 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "3x12 min Classic 2/1 Over-Unders",
+      "category": "Over-Unders",
+      "coach_or_source": "Hunter Allen / CTS",
+      "duration_minutes": 75,
+      "target_zone": "Zone 4/5 (Over-Unders) — 95% / 105–108% FTP (347 W / 383–394 W)",
+      "primary_adaptation": "Improve lactate shuttling and clearance while continuing to pedal near threshold",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W) with 2 x 1 min @ 105% FTP (383 W)",
+        "main_set": [
+          {
+            "sets": 3,
+            "work": "12 min continuous: 4 cycles of (2 min @ 95% FTP [347 W] + 1 min @ 105–108% FTP [383–394 W])",
+            "recovery": "6 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "12 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "3x15 min Lactate Shuttle (3/2 Over-Unders)",
+      "category": "Over-Unders",
+      "coach_or_source": "TrainerRoad / Chad Timmerman",
+      "duration_minutes": 80,
+      "target_zone": "Zone 4/5 (Over-Unders) — 92–95% / 105% FTP (336–347 W / 383 W)",
+      "primary_adaptation": "Enhance tolerance to repeated threshold surges and rapid metabolic recovery under load",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 3,
+            "work": "15 min continuous: 3 cycles of (3 min @ 92–95% FTP [336–347 W] + 2 min @ 105% FTP [383 W])",
+            "recovery": "6 min @ 55% FTP (201 W)"
+          }
+        ],
+        "cooldown": "14 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "Gimenez Intervals",
+      "category": "Over-Unders",
+      "coach_or_source": "Manuel Gimenez",
+      "duration_minutes": 70,
+      "target_zone": "Zone 3/5 (Hard Over-Unders) — 120% / 85–90% FTP (438 W / 310–329 W)",
+      "primary_adaptation": "Extreme lactate clearance under tempo/sweet-spot pressure and VO2 max durability",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 1,
+            "reps_per_set": 9,
+            "work": "1 min @ 120% FTP (438 W) immediately into 4 min @ 85–90% FTP (310–329 W) — 45 min continuous",
+            "recovery": "None between reps"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "Crisscross Tempo / Threshold",
+      "category": "Over-Unders",
+      "coach_or_source": "Chris Carmichael / CTS",
+      "duration_minutes": 90,
+      "target_zone": "Zone 3/4 (Over-Unders) — 102–105% / 85–88% FTP (372–383 W / 310–321 W)",
+      "primary_adaptation": "Build race-pace durability for rolling terrain and breakaway efforts",
+      "interval_breakdown": {
+        "warmup": "15 min @ 60–75% FTP (219–274 W)",
+        "main_set": [
+          {
+            "sets": 2,
+            "work": "24 min continuous: 6 cycles of (2 min @ 102–105% FTP [372–383 W] + 2 min @ 85–88% FTP [310–321 W])",
+            "recovery": "8 min @ 55–60% FTP (201–219 W)"
+          }
+        ],
+        "cooldown": "19 min @ 55–65% FTP (201–237 W)"
+      }
+    },
+    {
+      "name": "San Millán Zone 2 Metabolic Base",
+      "category": "Endurance",
+      "coach_or_source": "Iñigo San Millán",
+      "duration_minutes": 120,
+      "target_zone": "Zone 2 (Aerobic Endurance / LT1) — 68–75% FTP (248–274 W)",
+      "primary_adaptation": "Maximize mitochondrial density, fat oxidation (FatMax), and Type I fiber lactate clearance",
+      "interval_breakdown": {
+        "warmup": "10 min @ 55–65% FTP (201–237 W)",
+        "main_set": [
+          {
+            "sets": 1,
+            "work": "100 min steady @ 68–75% FTP (248–274 W) — avoid coasting and avoid surging above 78% FTP",
+            "recovery": "None"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    },
+    {
+      "name": "Long Polarized Aerobic Endurance",
+      "category": "Endurance",
+      "coach_or_source": "Stephen Seiler",
+      "duration_minutes": 180,
+      "target_zone": "Zone 2 (Low-Intensity Endurance) — 60–70% FTP (219–256 W)",
+      "primary_adaptation": "Deep aerobic durability, capillarization, and fatigue resistance without autonomic stress",
+      "interval_breakdown": {
+        "warmup": "15 min @ 55–60% FTP (201–219 W)",
+        "main_set": [
+          {
+            "sets": 1,
+            "work": "155 min steady @ 60–70% FTP (219–256 W), strictly capped below 75% FTP (274 W)",
+            "recovery": "None"
+          }
+        ],
+        "cooldown": "10 min @ 50–55% FTP (183–201 W)"
+      }
+    },
+    {
+      "name": "Endurance with Low-Cadence Torque (SFR)",
+      "category": "Endurance",
+      "coach_or_source": "Aldo Sassi / Italian Pro Method",
+      "duration_minutes": 120,
+      "target_zone": "Zone 2/3 (Endurance + Tempo Torque) — 65–72% FTP (237–263 W) + 80–85% FTP (292–310 W)",
+      "primary_adaptation": "Improve pedaling economy, Type IIa fiber recruitment, and climbing torque endurance",
+      "interval_breakdown": {
+        "warmup": "20 min @ 60–70% FTP (219–256 W)",
+        "main_set": [
+          {
+            "sets": 5,
+            "work": "6 min @ 80–85% FTP (292–310 W) seated at 50–55 RPM",
+            "recovery": "4 min @ 65–70% FTP (237–256 W) at 90–95 RPM"
+          },
+          {
+            "sets": 1,
+            "work": "40 min steady endurance @ 65–72% FTP (237–263 W) at normal cadence",
+            "recovery": "None"
+          }
+        ],
+        "cooldown": "10 min @ 55% FTP (201 W)"
+      }
+    }
+  ]
+}
