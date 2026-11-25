@@ -27,6 +27,7 @@ import {
   getTodayDateString,
 } from '@/lib/dates';
 import { downloadWeekFitZip } from '@/lib/fit/exportHelpers';
+import { parseApiResponse } from '@/lib/http';
 import {
   computeWeeklyZoneSplit,
   isExportableWorkout,
@@ -138,13 +139,9 @@ export function WeeklyDashboard({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ weekStart }),
       });
-      const payload = (await res.json()) as {
+      const payload = await parseApiResponse<{
         pushedCount?: number;
-        error?: string;
-      };
-      if (!res.ok) {
-        throw new Error(payload.error || 'Failed to push week to Intervals.icu.');
-      }
+      }>(res, 'Failed to push week to Intervals.icu');
       setPushFeedback({
         type: 'success',
         message: `PUSHED ${payload.pushedCount ?? exportableCount} WORKOUTS TO INTERVALS.ICU`,

@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Save, Sparkles, User, Zap } from 'lucide-react';
 import { saveAthleteProfileAction } from '@/app/actions/profile';
+import { parseApiResponse } from '@/lib/http';
 import {
   computeFractionalUtilization,
   selectReferencePeak5m,
@@ -105,12 +106,11 @@ export function ProfileView({
           baselineFtp: ftp,
         }),
       });
-      const payload = (await res.json()) as {
+      const payload = await parseApiResponse<{
         profile?: AthleteProfile;
-        error?: string;
-      };
-      if (!res.ok || !payload.profile) {
-        throw new Error(payload.error || 'Unable to estimate FTP.');
+      }>(res, 'Unable to estimate FTP');
+      if (!payload.profile) {
+        throw new Error('Unable to estimate FTP.');
       }
       setFtp(payload.profile.ai_estimated_ftp);
       setRationale(payload.profile.ftp_rationale);

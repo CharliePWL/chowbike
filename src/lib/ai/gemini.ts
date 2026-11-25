@@ -1,10 +1,15 @@
-import { GoogleGenAI, type Schema } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel, type Schema } from '@google/genai';
+
+export type AiThinkingMode = 'low' | 'high';
 
 const MODEL_FALLBACK_CHAIN = [
   'gemini-3.8-flash',
   'gemini-3.6-flash',
   'gemini-3.1-flash-lite',
 ] as const;
+
+const PER_CALL_TIMEOUT_MS = 22_000;
+const TOTAL_DEADLINE_MS = 48_000;
 
 function isTransientOrUnavailableError(err: unknown): boolean {
   if (err instanceof SyntaxError) return true;
@@ -13,11 +18,22 @@ function isTransientOrUnavailableError(err: unknown): boolean {
     msg.includes('"code":503') ||
     msg.includes('"code":429') ||
     msg.includes('"code":404') ||
+    msg.includes('"code":504') ||
     msg.includes('UNAVAILABLE') ||
     msg.includes('RESOURCE_EXHAUSTED') ||
     msg.includes('NOT_FOUND') ||
+    msg.includes('DEADLINE_EXCEEDED') ||
     msg.includes('high demand') ||
-    msg.includes('empty response')
+    msg.includes('empty response') ||
+    /timed?\s*out|timeout|aborted|ETIMEDOUT|ECONNRESET/i.test(msg)
+  );
+}
+
+function isUnsupportedThinkingError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return (
+    (msg.includes('"code":400') || msg.includes('INVALID_ARGUMENT')) &&
+    /thinking/i.test(msg)
   );
 }
 
@@ -52,43 +68,76 @@ export async function generateStructuredJson<T>(
   apiKey: string,
   prompt: string,
   responseSchema: Schema,
-  temperature = 0.35
+  temperature = 0.35,
+  thinkingMode: AiThinkingMode = 'low'
 ): Promise<T> {
-  const ai = new GoogleGenAI({ apiKey });
+  const startedAt = Date.now();
+  const perCallTimeoutMs =
+    thinkingMode === 'high' ? 45_000 : PER_CALL_TIMEOUT_MS;
+  const totalDeadlineMs =
+    thinkingMode === 'high' ? 52_000 : TOTAL_DEADLINE_MS;
+  const targetThinkingLevel =
+    thinkingMode === 'high' ? ThinkingLevel.HIGH : ThinkingLevel.LOW;
   let lastError: unknown = null;
 
   for (let i = 0; i < MODEL_FALLBACK_CHAIN.length; i++) {
+    const remainingMs = totalDeadlineMs - (Date.now() - startedAt);
+    if (remainingMs < 5_000) {
+      break;
+    }
+
     const model = MODEL_FALLBACK_CHAIN[i];
-    const maxAttempts = i === 0 ? 2 : 1;
+    const callTimeoutMs = Math.min(perCallTimeoutMs, remainingMs);
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: { timeout: callTimeoutMs },
+    });
 
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      try {
-        const response = await ai.models.generateContent({
-          model,
-          contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-            responseSchema,
-            temperature,
-          },
-        });
+    const runCall = async (useThinkingConfig: boolean) => {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema,
+          temperature,
+          ...(useThinkingConfig
+            ? { thinkingConfig: { thinkingLevel: targetThinkingLevel } }
+            : {}),
+        },
+      });
 
-        if (!response.text) {
-          throw new Error('Gemini returned an empty response.');
-        }
+      if (!response.text) {
+        throw new Error('Gemini returned an empty response.');
+      }
 
-        return JSON.parse(stripJsonCodeFence(response.text)) as T;
-      } catch (err) {
-        lastError = err;
-        if (!isTransientOrUnavailableError(err)) {
-          throw err;
+      return JSON.parse(stripJsonCodeFence(response.text)) as T;
+    };
+
+    try {
+      return await runCall(true);
+    } catch (err) {
+      if (isUnsupportedThinkingError(err)) {
+        try {
+          return await runCall(false);
+        } catch (retryErr) {
+          lastError = retryErr;
+          if (!isTransientOrUnavailableError(retryErr)) {
+            throw retryErr;
+          }
+          continue;
         }
-        if (attempt < maxAttempts) {
-          await new Promise((resolve) => setTimeout(resolve, 1200));
-        }
+      }
+
+      lastError = err;
+      if (!isTransientOrUnavailableError(err)) {
+        throw err;
       }
     }
   }
 
-  throw lastError ?? new Error('All Gemini models are currently unavailable.');
+  throw (
+    lastError ??
+    new Error('All Gemini models timed out or are currently unavailable.')
+  );
 }

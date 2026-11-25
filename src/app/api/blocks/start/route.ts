@@ -89,6 +89,7 @@ interface StartBlockBody {
   unavailableDays?: number[];
   blockGoal?: string;
   environment?: 'indoor' | 'outdoor';
+  thinkingMode?: 'low' | 'high';
 }
 
 interface StartBlockResponse {
@@ -140,6 +141,7 @@ export async function POST(request: Request) {
     const unavailableSet = new Set(unavailableArr);
     const blockGoal = (body.blockGoal ?? '').trim();
     const environment = body.environment === 'indoor' ? 'indoor' : 'outdoor';
+    const thinkingMode = body.thinkingMode === 'high' ? 'high' : 'low';
 
     const [ctx, intervalsResult, wellnessResult, powerCurvesResult] =
       await Promise.all([
@@ -209,7 +211,8 @@ ${ctx.upcomingEvents.length > 0 ? JSON.stringify(ctx.upcomingEvents, null, 2) : 
       apiKey,
       prompt,
       START_BLOCK_SCHEMA,
-      0.35
+      0.35,
+      thinkingMode
     );
 
     await updateEstimatedFtp({

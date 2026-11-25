@@ -160,7 +160,7 @@ export async function fetchRecentIntervalsRides(
         Accept: 'application/json',
       },
       cache: 'no-store',
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(6_000),
     });
 
     if (!res.ok) {
@@ -250,7 +250,7 @@ export async function fetchRecentIntervalsWellness(
         Accept: 'application/json',
       },
       cache: 'no-store',
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(6_000),
     });
 
     if (!res.ok) {
@@ -425,7 +425,7 @@ export async function fetchIntervalsPowerCurves(
         Accept: 'application/json',
       },
       cache: 'no-store',
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(6_000),
     });
 
     if (!res.ok) {

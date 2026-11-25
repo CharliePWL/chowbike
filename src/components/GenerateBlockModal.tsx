@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Calendar, Layers, Loader2, Sparkles, X } from 'lucide-react';
 import { addDays, formatWeekRange } from '@/lib/dates';
+import { parseApiResponse } from '@/lib/http';
 import { DAYS_OF_WEEK, type TrainingBlock } from '@/types/training';
 
 interface GenerateBlockModalProps {
@@ -45,6 +46,7 @@ export function GenerateBlockModal({
   const [environment, setEnvironment] = useState<'outdoor' | 'indoor'>(
     'outdoor'
   );
+  const [thinkingMode, setThinkingMode] = useState<'low' | 'high'>('low');
   const [notesOrGoal, setNotesOrGoal] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +80,7 @@ export function GenerateBlockModal({
             availableHours: parsedHours,
             unavailableDays,
             environment,
+            thinkingMode,
             checkInNotes: notesOrGoal,
           }
         : {
@@ -86,6 +89,7 @@ export function GenerateBlockModal({
             availableHours: parsedHours,
             unavailableDays,
             environment,
+            thinkingMode,
             blockGoal: notesOrGoal,
           };
 
@@ -95,14 +99,10 @@ export function GenerateBlockModal({
         body: JSON.stringify(bodyPayload),
       });
 
-      const payload = (await res.json()) as {
+      const payload = await parseApiResponse<{
         weekStart?: string;
         startWeek?: string;
-        error?: string;
-      };
-      if (!res.ok) {
-        throw new Error(payload.error || 'Failed to generate workouts.');
-      }
+      }>(res, 'Failed to generate workouts');
 
       onGenerated(
         payload.weekStart ?? payload.startWeek ?? currentWeekStart
@@ -303,6 +303,52 @@ export function GenerateBlockModal({
                   {env === 'outdoor' ? 'OUTDOOR ROAD' : 'INDOOR ERG'}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* AI Thinking Depth Slider: Low (Fast) vs High (Deep) */}
+          <div>
+            <div className="mb-1.5 flex items-center justify-between gap-2">
+              <span className="font-mono text-[11px] font-medium tracking-wider text-[#6B6B68] uppercase">
+                AI Thinking Depth
+              </span>
+              <span className="font-mono text-[10px] text-[#6B6B68] uppercase">
+                {thinkingMode === 'low' ? 'Fast · ~5–15s' : 'Deep · ~20–50s'}
+              </span>
+            </div>
+            <div
+              role="radiogroup"
+              aria-label="AI Thinking Depth"
+              className="relative grid grid-cols-2 border border-[#D4D4CE] bg-[#EFEFEC] p-0.5"
+            >
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute top-0.5 bottom-0.5 left-0.5 w-[calc(50%-2px)] transition-transform duration-200 ease-out ${
+                  thinkingMode === 'high'
+                    ? 'translate-x-full bg-[#3B5B7A]'
+                    : 'translate-x-0 bg-[#181818]'
+                }`}
+              />
+              {(['low', 'high'] as const).map((level) => {
+                const active = thinkingMode === level;
+                return (
+                  <button
+                    key={level}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    disabled={isGenerating}
+                    onClick={() => setThinkingMode(level)}
+                    className={`relative z-10 py-2 font-mono text-xs font-medium uppercase transition-colors ${
+                      active
+                        ? 'text-[#F7F7F5]'
+                        : 'text-[#6B6B68] hover:text-[#181818]'
+                    }`}
+                  >
+                    {level === 'low' ? 'LOW · FAST' : 'HIGH · DEEP'}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

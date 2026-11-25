@@ -18,6 +18,7 @@ import {
 import { formatDuration } from '@/lib/dates';
 import { downloadWorkoutFit } from '@/lib/fit/exportHelpers';
 import { isExportableWorkout } from '@/lib/fit/intervalParser';
+import { parseApiResponse } from '@/lib/http';
 import { getZoneMeta, type Workout } from '@/types/training';
 import { PowerPreviewChart } from './PowerPreviewChart';
 
@@ -135,10 +136,10 @@ export function WorkoutItem({
           environment: adjustEnvironment,
         }),
       });
-      const payload = (await res.json()) as { error?: string };
-      if (!res.ok) {
-        throw new Error(payload.error || 'Failed to adjust workout.');
-      }
+      await parseApiResponse<Record<string, unknown>>(
+        res,
+        'Failed to adjust workout'
+      );
       setAiPrompt('');
       router.refresh();
     } catch (err) {
