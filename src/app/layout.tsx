@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icons/icon.svg', type: 'image/svg+xml' },
+      { url: '/icons/icon-192.png?v=2', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon.svg?v=2', type: 'image/svg+xml' },
     ],
     apple: [
-      { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icons/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
